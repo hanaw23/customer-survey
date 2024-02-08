@@ -37,6 +37,12 @@ const customerData = reactive<Customer>({
   favoriteOutfitColor: "",
 });
 const colorSelected = ref("");
+const validation = reactive({
+  name: true,
+  igAccount: true,
+  favoriteOutfitColor: true,
+  isSubmit: false,
+});
 
 // methods
 watchEffect(() => {
@@ -48,12 +54,26 @@ watchEffect(() => {
     colorSelected.value = props.customerData.favoriteOutfitColor;
   }
 });
-watch(
-  () => colorSelected.value,
-  () => {
-    customerData.favoriteOutfitColor = colorSelected.value;
+
+watch([colorSelected, customerData], () => {
+  customerData.favoriteOutfitColor = colorSelected.value;
+
+  if (customerData.name !== "") {
+    validation.name = true;
+  } else {
+    validation.name = false;
   }
-);
+  if (customerData.igAccount !== "") {
+    validation.igAccount = true;
+  } else {
+    validation.igAccount = false;
+  }
+  if (customerData.favoriteOutfitColor !== "") {
+    validation.favoriteOutfitColor = true;
+  } else {
+    validation.favoriteOutfitColor = false;
+  }
+});
 
 const closeDialog = (id?: string) => {
   emits("close");
@@ -66,30 +86,44 @@ const closeDialog = (id?: string) => {
 
 // submit / save
 const methodAddEditCustomer = () => {
-  if (props.typeForm === FormType.EDIT) {
-    for (let i = 0; i < dataCustomers.length; i++) {
-      if (dataCustomers[i].id === customerData.id) {
-        dataCustomers[i].name = customerData.name;
-        dataCustomers[i].igAccount = customerData.igAccount;
-        dataCustomers[i].favoriteOutfitColor = customerData.favoriteOutfitColor;
+  validation.isSubmit = false;
+  if (validation.name && validation.igAccount && validation.favoriteOutfitColor && customerData.name && customerData.igAccount && customerData.favoriteOutfitColor) {
+    if (props.typeForm === FormType.EDIT) {
+      for (let i = 0; i < dataCustomers.length; i++) {
+        if (dataCustomers[i].id === customerData.id) {
+          dataCustomers[i].name = customerData.name;
+          dataCustomers[i].igAccount = customerData.igAccount;
+          dataCustomers[i].favoriteOutfitColor = customerData.favoriteOutfitColor;
+        }
       }
+      toast.add({
+        severity: "success",
+        summary: "Edit Success",
+        detail: "Success edited customer",
+        life: 3000,
+      });
+      closeDialog("");
+    } else if (props.typeForm === FormType.ADD) {
+      dataCustomers.unshift(customerData);
+      toast.add({
+        severity: "success",
+        summary: "Add New Success",
+        detail: "Success added new customer",
+        life: 3000,
+      });
+      closeDialog(customerData.id);
     }
-    toast.add({
-      severity: "success",
-      summary: "Edit Success",
-      detail: "Success edited customer",
-      life: 3000,
-    });
-    closeDialog("");
-  } else if (props.typeForm === FormType.ADD) {
-    dataCustomers.unshift(customerData);
-    toast.add({
-      severity: "success",
-      summary: "Add New Success",
-      detail: "Success added new customer",
-      life: 3000,
-    });
-    closeDialog(customerData.id);
+  } else {
+    if (customerData.name === "") {
+      validation.name = false;
+    }
+    if (customerData.igAccount === "") {
+      validation.igAccount = false;
+    }
+    if (customerData.favoriteOutfitColor === "") {
+      validation.favoriteOutfitColor = false;
+    }
+    validation.isSubmit = true;
   }
 };
 </script>
@@ -109,17 +143,27 @@ const methodAddEditCustomer = () => {
 
       <div class="mb-4">
         <div class="flex flex-col gap-2 mb-3">
-          <label for="name" class="text-sm font-medium -mb-2">Name</label>
-          <InputText id="name" v-model="customerData.name" placeholder="Enter customer name." class="border border-slate-300 p-2" />
+          <label for="name" class="text-sm font-medium -mb-2" :class="[!validation.name && validation.isSubmit ? 'text-red-500' : '']">Name*</label>
+          <InputText id="name" v-model="customerData.name" placeholder="Enter customer name." class="border p-2" :class="[!validation.name && validation.isSubmit ? 'border-red-500' : 'border-slate-300']" />
+          <small v-if="!validation.name && validation.isSubmit" class="text-xs text-red-500 -mt-1">Cannot be empty!</small>
         </div>
         <div class="flex flex-col gap-2 mb-3">
-          <label for="instagram" class="text-sm font-medium -mb-2">Instagram Account</label>
-          <InputText id="instagram" v-model="customerData.igAccount" placeholder="Enter customer's instagram account." class="border border-slate-300 p-2" />
+          <label for="instagram" class="text-sm font-medium -mb-2" :class="[!validation.igAccount && validation.isSubmit ? 'text-red-500' : '']">Instagram Account*</label>
+          <InputText id="instagram" v-model="customerData.igAccount" placeholder="Enter customer's instagram account." class="border p-2" :class="[!validation.igAccount && validation.isSubmit ? 'border-red-500' : 'border-slate-300']" />
+          <small v-if="!validation.igAccount && validation.isSubmit" class="text-xs text-red-500 -mt-1">Cannot be empty!</small>
         </div>
         <div class="flex flex-col gap-2 mb-3">
-          <label for="favcolor" class="text-sm font-medium -mb-2">Favorite Outfit Color</label>
-          <InputText id="favcolor" v-model="customerData.favoriteOutfitColor" placeholder="Pick the color." disabled class="border border-slate-300 p-2" />
+          <label for="favcolor" class="text-sm font-medium -mb-2" :class="[!validation.favoriteOutfitColor && validation.isSubmit ? 'text-red-500' : '']">Favorite Outfit Color*</label>
+          <InputText
+            id="favcolor"
+            v-model="customerData.favoriteOutfitColor"
+            placeholder="Pick the color."
+            disabled
+            class="border p-2"
+            :class="[!validation.favoriteOutfitColor && validation.isSubmit ? 'border-red-500' : 'border-slate-300']"
+          />
           <ColorPicker v-model="colorSelected" inline class="mr-6" />
+          <small v-if="!validation.favoriteOutfitColor && validation.isSubmit" class="text-xs text-red-500">Cannot be empty!</small>
         </div>
       </div>
     </div>

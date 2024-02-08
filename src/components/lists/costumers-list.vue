@@ -33,8 +33,6 @@ const rowClick = (event: any) => {
       current-page-report-template="Showing {first} to {last} of {totalRecords} customers"
       class="p-fluid text-sm"
       responsive-layout="scroll"
-      state-storage="local"
-      state-key="customer-datatable"
       @row-click="rowClick($event.data)"
     >
       <template #loading>
@@ -52,24 +50,21 @@ const rowClick = (event: any) => {
 
       <Column ref="name" field="name" header="Customer Name" :sortable="true" class="truncate">
         <template #body="slotProps">
-          <Skeleton v-if="loading" />
-          <div v-else>
+          <div>
             {{ slotProps.data?.name }}
           </div>
         </template>
       </Column>
       <Column ref="igAccount" field="igAccount" header="Instagram Account" class="truncate">
         <template #body="slotProps">
-          <Skeleton v-if="loading" />
-          <div v-else>
+          <div>
             {{ slotProps.data?.igAccount }}
           </div>
         </template>
       </Column>
       <Column ref="favoriteOutfitColor" field="favoriteOutfitColor" header="Favorite Color" class="truncate">
         <template #body="slotProps">
-          <Skeleton v-if="loading" />
-          <div v-else class="flex flex-row gap-3">
+          <div class="flex flex-row gap-3">
             <div :style="{ backgroundColor: `#${slotProps.data?.favoriteOutfitColor}` as string }" class="w-5 h-5 rounded" />
             #{{ slotProps.data?.favoriteOutfitColor }}
           </div>

@@ -37,9 +37,10 @@ const deleteCustomer = () => {
     message: `Are you sure you want to delete ${customerData.value.name}?`,
     header: "Confirmation",
     icon: "pi pi-exclamation-triangle",
-    acceptClass: "bg-blue-500",
+    acceptClass: "bg-blue-500 py-1 px-4 text-white",
+    rejectClass: "bg-red-500 py-1 px-4 text-white",
     accept: () => {
-      dataCustomers.filter((customer) => customer.id === Number(customerId));
+      dataCustomers.filter((customer) => customer.id !== Number(customerId));
       toast.add({
         severity: "success",
         summary: "Delete Success",
