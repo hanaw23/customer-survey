@@ -102,7 +102,6 @@ const methodAddEditCustomer = () => {
         detail: "Success edited customer",
         life: 3000,
       });
-      closeDialog("");
     } else if (props.typeForm === FormType.ADD) {
       dataCustomers.unshift(customerData);
       toast.add({
@@ -111,8 +110,8 @@ const methodAddEditCustomer = () => {
         detail: "Success added new customer",
         life: 3000,
       });
-      closeDialog(customerData.id);
     }
+    closeDialog(customerData.id);
   } else {
     if (customerData.name === "") {
       validation.name = false;

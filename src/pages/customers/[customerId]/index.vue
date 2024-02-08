@@ -5,6 +5,8 @@ import { useToast } from "primevue/usetoast";
 import { useConfirm } from "primevue/useconfirm";
 import type { Customer } from "../../../interfaces/customer";
 import { dataCustomers } from "../../../dummy/data";
+import AddEditCustomer from "../../../components/forms/add-edit-customer.vue";
+import { FormType } from "../../../interfaces/form";
 
 // global
 const router = useRouter();
@@ -17,6 +19,8 @@ const toast = useToast();
 // declarations
 // refs
 const customerData = ref<Customer>(null);
+const editCustomer = ref(false);
+const isDialogOpen = ref(false);
 
 // Methods
 const findData = () => {
@@ -28,8 +32,16 @@ onMounted(() => {
 });
 
 // edit and delete
-const editCustomer = () => {
-  router.push(`/customers/${customerId}/edit`);
+const openDialog = () => {
+  isDialogOpen.value = true;
+};
+const closeDialog = () => {
+  isDialogOpen.value = false;
+  editCustomer.value = false;
+};
+const editCustomerModal = () => {
+  editCustomer.value = true;
+  openDialog();
 };
 
 const deleteCustomer = () => {
@@ -70,7 +82,7 @@ const deleteCustomer = () => {
                 <Icon name="material-symbols:delete-outline" size="18px" />
                 <p class="mx-2">Delete</p>
               </Button>
-              <Button type="button" class="bg-blue-500 text-white hover:bg-blue-600 my-2 px-3" @click="editCustomer"
+              <Button type="button" class="bg-blue-500 text-white hover:bg-blue-600 my-2 px-3" @click="editCustomerModal"
                 ><Icon name="material-symbols:edit-outline-rounded" size="18px" />
                 <p class="mx-2">Edit</p></Button
               >
@@ -78,7 +90,6 @@ const deleteCustomer = () => {
           </div>
         </div>
       </div>
-
       <!-- Body -->
       <div class="rounded-md border py-4 my-4">
         <div class="mx-4 grid grid-cols-1 gap-4 gap-y-2 pb-7 text-sm lg:grid-cols-3">
@@ -122,6 +133,9 @@ const deleteCustomer = () => {
           </div>
         </div>
       </div>
+
+      <!-- Edit Modal -->
+      <AddEditCustomer :type-form="FormType.EDIT" :open-dialog="isDialogOpen" :customer-data="(customerData as any)" @close="closeDialog" />
     </div>
   </div>
 </template>
