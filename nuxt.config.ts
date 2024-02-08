@@ -30,11 +30,12 @@ export default defineNuxtConfig({
       mode: "out-in",
     },
   },
+  // srcDir: "src",
   devtools: {
     enabled: false,
   },
   modules: ["@nuxtjs/tailwindcss", "nuxt-icon"],
-  // plugins: [{ src: "~/plugins/primevue.ts" }],
+  plugins: [{ src: "~/plugins/primevue.ts" }],
   build: {
     transpile: ["primevue"],
   },
