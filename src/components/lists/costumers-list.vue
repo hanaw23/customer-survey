@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { dataCustomers } from "../../dummy/data.ts";
+import { dataCustomers } from "../../dummy/data";
 
 // global
 const router = useRouter();

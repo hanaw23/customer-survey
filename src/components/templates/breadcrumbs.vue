@@ -1,15 +1,18 @@
 <script setup lang="ts">
-import { dataCustomers } from "../../dummy/data.ts";
+import { dataCustomers } from "../../dummy/data";
+import type { Crumb } from "../../interfaces/breadcrumb";
+
 // global
 const route = useRoute();
 const customerId = route.params?.customerId;
-const customerDetails = computed(() => {
-  dataCustomers.find((customer) => customer.id === Number(customerId));
+const customerName = computed(() => {
+  return dataCustomers.find((customer) => customer.id === Number(customerId))?.name;
 });
 
 // Methods
+
 const breadcrumbs = computed(() => {
-  const crumbs = [];
+  const crumbs = [] as Crumb[];
   const routes = route.fullPath.split("/");
   let count = 1;
   while (count < routes.length) {
@@ -20,7 +23,7 @@ const breadcrumbs = computed(() => {
     if (route.path.includes("customers")) {
       if (to === `/customers/${route.params.customerId}`) {
         const item = {
-          label: customerDetails?.value?.name ?? "Details",
+          label: (customerName.value as string) ?? "Details",
           disabled: false,
           to,
         };
@@ -49,7 +52,7 @@ const breadcrumbs = computed(() => {
 
 <template>
   <div>
-    <Breadcrumb :model="breadcrumbs" aria-label="breadcrumb" class="overflow-scroll truncate md:!border-none !capitalize">
+    <Breadcrumb :model="(breadcrumbs as Crumb[])" aria-label="breadcrumb" class="overflow-scroll truncate md:!border-none !capitalize">
       <template #item="{ item }">
         <NuxtLink :to="item.to" exact-active-class="font-semibold text-slate-900 capitalize">{{ item.label?.toString().replace(/-/g, " ") }} </NuxtLink>
       </template>

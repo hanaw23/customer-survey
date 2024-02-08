@@ -18,7 +18,7 @@ const toast = useToast();
 
 // declarations
 // refs
-const customerData = ref<Customer>(null);
+const customerData = ref<Customer>();
 const editCustomer = ref(false);
 const isDialogOpen = ref(false);
 
@@ -46,7 +46,7 @@ const editCustomerModal = () => {
 
 const deleteCustomer = () => {
   confirm.require({
-    message: `Are you sure you want to delete ${customerData.value.name}?`,
+    message: `Are you sure you want to delete ${customerData ? customerData.value?.name : "this customer"}?`,
     header: "Confirmation",
     icon: "pi pi-exclamation-triangle",
     acceptClass: "bg-blue-500 py-1 px-4 text-white",

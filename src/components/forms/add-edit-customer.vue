@@ -2,8 +2,8 @@
 import type { PropType } from "vue";
 import { useToast } from "primevue/usetoast";
 import type { Customer } from "../../interfaces/customer.ts";
-import { FormType } from "../../interfaces/form.ts";
-import { dataCustomers } from "../../dummy/data.ts";
+import { FormType } from "../../interfaces/form";
+import { dataCustomers } from "../../dummy/data";
 
 // global
 const router = useRouter();
@@ -75,9 +75,9 @@ watch([colorSelected, customerData], () => {
   }
 });
 
-const closeDialog = (id?: string) => {
+const closeDialog = (id?: number) => {
   emits("close");
-  if (id === "") {
+  if (id === null) {
     router.push("/customers");
   } else {
     router.push(`/customers/${customerData.id}`);
@@ -174,7 +174,7 @@ const methodAddEditCustomer = () => {
           type="button"
           label="Cancel"
           class="bg-white-400 border border-slate-400 text-slate-400 py-2 px-4 hover:bg-slate-500 hover:text-white hover:border-slate-500"
-          @click="() => (props.typeForm === FormType.EDIT ? closeDialog(customerData.id) : closeDialog(''))"
+          @click="() => (props.typeForm === FormType.EDIT ? closeDialog(customerData.id) : closeDialog())"
         ></Button>
         <Button type="button" :label="props.typeForm === FormType.EDIT ? 'Save' : 'Submit'" class="bg-blue-500 text-white py-2 px-4 hover:bg-blue-600" @click="methodAddEditCustomer"></Button>
       </div>

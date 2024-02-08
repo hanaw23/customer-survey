@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import type { PropType } from "vue";
-import type { MenuItem } from "../interfaces/navigation-menu.ts";
+import type { MenuItem } from "../../interfaces/navigation-menu";
 
 // props
 defineProps({

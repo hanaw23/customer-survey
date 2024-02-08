@@ -2,7 +2,7 @@
 import Breadcrumbs from "../templates/breadcrumbs.vue";
 // global
 // props / emits
-const emits = defineEmits(["toggleMobileSidebar, toggleDesktopSidebar"]);
+const emits = defineEmits(["toggleMobileSidebar", "toggleDesktopSidebar"]);
 
 // methods
 const toggleSideBar = () => {
