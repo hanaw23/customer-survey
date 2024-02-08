@@ -40,10 +40,19 @@ export default defineNuxtConfig({
     transpile: ["primevue"],
   },
   builder: "vite",
-  vite: {
-    build: {
-      chunkSizeWarningLimit: 1600,
-    },
+  // vite: {
+  //   build: {
+  //     chunkSizeWarningLimit: 1600,
+  //   },
+  // },
+  experimental: {
+    /**
+     * see: https://v3.nuxtjs.org/api/configuration/nuxt.config#inlinessrstyles
+     */
+    inlineRouteRules: false,
+    respectNoSSRHeader: false,
+
+    // inlineSSRStyles: false,
   },
   tailwindcss: {
     cssPath: "~/src/assets/css/main.css",
