@@ -171,7 +171,12 @@ const methodAddEditCustomer = () => {
     <!-- submit button -->
     <template #footer>
       <div class="flex justify-end gap-2">
-        <Button type="button" label="Cancel" class="bg-white-400 border border-slate-400 text-slate-400 py-2 px-4 hover:bg-slate-500 hover:text-white hover:border-slate-500" @click="closeDialog('')"></Button>
+        <Button
+          type="button"
+          label="Cancel"
+          class="bg-white-400 border border-slate-400 text-slate-400 py-2 px-4 hover:bg-slate-500 hover:text-white hover:border-slate-500"
+          @click="() => (FormType.EDIT ? closeDialog(customerData.id) : closeDialog(''))"
+        ></Button>
         <Button type="button" :label="props.typeForm === FormType.EDIT ? 'Save' : 'Submit'" class="bg-blue-500 text-white py-2 px-4 hover:bg-blue-600" @click="methodAddEditCustomer"></Button>
       </div>
     </template>
