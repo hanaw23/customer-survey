@@ -1,0 +1,72 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer tailwind-base, primevue, tailwind-utilities;
+
+@layer tailwind-base {
+  @tailwind base;
+}
+
+@layer tailwind-utilities {
+  @tailwind components;
+  @tailwind utilities;
+}
+
+@layer base {
+  html,
+  body {
+    @apply font-body overscroll-none;
+  }
+}
+
+/* Override default font for Primevue Components */
+.p-component {
+  @apply !font-body !text-sm;
+}
+.p-link {
+  @apply !font-body;
+}
+
+.p-tooltip {
+  @apply !z-[10000];
+}
+.p-panel .p-panel-content {
+  @apply !p-0;
+}
+
+/* Showing Cursor Pointer When Hovering Over Rows */
+.p-datatable .p-datatable-tbody > tr {
+  @apply cursor-pointer;
+}
+.p-inputnumber-button-group {
+  @apply rounded-r bg-blue-500;
+}
+.fc .fc-non-business {
+  background: repeating-linear-gradient(45deg, #c7c7c7, #c7c7c7 10px, #9e9e9e 10px, #9e9e9e 20px);
+}
+
+.p-tag {
+  @apply !p-0 !text-sm !px-2;
+}
+.p-dialog .p-dialog-header {
+  @apply !p-[1rem];
+}
+.p-dialog .p-dialog-footer {
+  @apply !p-[1rem];
+}
+
+/* Page Transitions */
+.page-enter-from {
+  opacity: 0;
+  transform: translateY(-10px);
+}
+
+.page-enter-active,
+.page-leave-active {
+  transition: all 0.2s;
+}
+.page-enter,
+.page-leave-to {
+  opacity: 0;
+}

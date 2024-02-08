@@ -1,0 +1,142 @@
+import Accordion from "primevue/accordion";
+import AccordionTab from "primevue/accordiontab";
+import AutoComplete from "primevue/autocomplete";
+import Avatar from "primevue/avatar";
+import AvatarGroup from "primevue/avatargroup";
+import Badge from "primevue/badge";
+import BadgeDirective from "primevue/badgedirective";
+import Breadcrumb from "primevue/breadcrumb";
+import Button from "primevue/button";
+import Calendar from "primevue/calendar";
+import Card from "primevue/card";
+import CascadeSelect from "primevue/cascadeselect";
+import Checkbox from "primevue/checkbox";
+import Chips from "primevue/chips";
+import ColorPicker from "primevue/colorpicker";
+import Column from "primevue/column";
+import ColumnGroup from "primevue/columngroup";
+import PrimeVue from "primevue/config";
+import ConfirmationService from "primevue/confirmationservice";
+import ConfirmDialog from "primevue/confirmdialog";
+import ConfirmPopup from "primevue/confirmpopup";
+import ContextMenu from "primevue/contextmenu";
+import DataView from "primevue/dataview";
+import DataTable from "primevue/datatable";
+import DeferredContent from "primevue/deferredcontent";
+import Dialog from "primevue/dialog";
+import Divider from "primevue/divider";
+import Dropdown from "primevue/dropdown";
+import FileUpload from "primevue/fileupload";
+import Galleria from "primevue/galleria";
+import Image from "primevue/image";
+import InputMask from "primevue/inputmask";
+import InputNumber from "primevue/inputnumber";
+import InputSwitch from "primevue/inputswitch";
+import InputText from "primevue/inputtext";
+import Menu from "primevue/menu";
+import Message from "primevue/message";
+import MultiSelect from "primevue/multiselect";
+import OverlayPanel from "primevue/overlaypanel";
+import Paginator from "primevue/paginator";
+import Panel from "primevue/panel";
+import PanelMenu from "primevue/panelmenu";
+import Password from "primevue/password";
+import ProgressSpinner from "primevue/progressspinner";
+import RadioButton from "primevue/radiobutton";
+import Row from "primevue/row";
+import ScrollPanel from "primevue/scrollpanel";
+import Sidebar from "primevue/sidebar";
+import Skeleton from "primevue/skeleton";
+import Slider from "primevue/slider";
+import SplitButton from "primevue/splitbutton";
+import Splitter from "primevue/splitter";
+import SplitterPanel from "primevue/splitterpanel";
+import Steps from "primevue/steps";
+import TabMenu from "primevue/tabmenu";
+import TabPanel from "primevue/tabpanel";
+import TabView from "primevue/tabview";
+import Tag from "primevue/tag";
+import Timeline from "primevue/timeline";
+import Toast from "primevue/toast";
+import ToastService from "primevue/toastservice";
+import Tooltip from "primevue/tooltip";
+import TreeTable from "primevue/treetable";
+import BlockUI from "primevue/blockui";
+
+export default defineNuxtPlugin((nuxtApp) => {
+  nuxtApp.vueApp.use(
+    PrimeVue,
+    { ripple: true },
+    {
+      zIndex: {
+        modal: 1100, // dialog, sidebar
+        overlay: 1000, // dropdown, overlaypanel
+        menu: 1000, // overlay menus
+        tooltip: 1400, // tooltip
+      },
+    }
+  );
+  nuxtApp.vueApp.use(ToastService);
+  nuxtApp.vueApp.use(ConfirmationService);
+  nuxtApp.vueApp.component("DataTable", DataTable);
+  nuxtApp.vueApp.component("Column", Column);
+  nuxtApp.vueApp.component("InputText", InputText);
+  nuxtApp.vueApp.component("InputNumber", InputNumber);
+  nuxtApp.vueApp.component("MultiSelect", MultiSelect);
+  nuxtApp.vueApp.component("Dropdown", Dropdown);
+  nuxtApp.vueApp.component("Tag", Tag);
+  nuxtApp.vueApp.component("Sidebar", Sidebar);
+  nuxtApp.vueApp.component("Avatar", Avatar);
+  nuxtApp.vueApp.component("AvatarGroup", AvatarGroup);
+  nuxtApp.vueApp.directive("tooltip", Tooltip);
+  nuxtApp.vueApp.component("Toast", Toast);
+  nuxtApp.vueApp.component("Dialog", Dialog);
+  nuxtApp.vueApp.component("ConfirmDialog", ConfirmDialog);
+  nuxtApp.vueApp.component("Badge", Badge);
+  nuxtApp.vueApp.directive("badge", BadgeDirective);
+  nuxtApp.vueApp.component("CascadeSelect", CascadeSelect);
+  nuxtApp.vueApp.component("Checkbox", Checkbox);
+  nuxtApp.vueApp.component("AutoComplete", AutoComplete);
+  nuxtApp.vueApp.component("Calendar", Calendar);
+  nuxtApp.vueApp.component("ColumnGroup", ColumnGroup);
+  nuxtApp.vueApp.component("Row", Row);
+  nuxtApp.vueApp.component("SplitButton", SplitButton);
+  nuxtApp.vueApp.component("Button", Button);
+  nuxtApp.vueApp.component("InputMask", InputMask);
+  nuxtApp.vueApp.component("TabView", TabView);
+  nuxtApp.vueApp.component("TabPanel", TabPanel);
+  nuxtApp.vueApp.component("RadioButton", RadioButton);
+  nuxtApp.vueApp.component("ColorPicker", ColorPicker);
+  nuxtApp.vueApp.component("Breadcrumb", Breadcrumb);
+  nuxtApp.vueApp.component("ContextMenu", ContextMenu);
+  nuxtApp.vueApp.component("PanelMenu", PanelMenu);
+  nuxtApp.vueApp.component("Galleria", Galleria);
+  nuxtApp.vueApp.component("ConfirmPopup", ConfirmPopup);
+  nuxtApp.vueApp.component("TabMenu", TabMenu);
+  nuxtApp.vueApp.component("Panel", Panel);
+  nuxtApp.vueApp.component("Divider", Divider);
+  nuxtApp.vueApp.component("Splitter", Splitter);
+  nuxtApp.vueApp.component("SplitterPanel", SplitterPanel);
+  nuxtApp.vueApp.component("ScrollPanel", ScrollPanel);
+  nuxtApp.vueApp.component("Card", Card);
+  nuxtApp.vueApp.component("Steps", Steps);
+  nuxtApp.vueApp.component("Password", Password);
+  nuxtApp.vueApp.component("Skeleton", Skeleton);
+  nuxtApp.vueApp.component("Chips", Chips);
+  nuxtApp.vueApp.component("ProgressSpinner", ProgressSpinner);
+  nuxtApp.vueApp.component("Paginator", Paginator);
+  nuxtApp.vueApp.component("InputSwitch", InputSwitch);
+  nuxtApp.vueApp.component("FileUpload", FileUpload);
+  nuxtApp.vueApp.component("Menu", Menu);
+  nuxtApp.vueApp.component("Message", Message);
+  nuxtApp.vueApp.component("Image", Image);
+  nuxtApp.vueApp.component("DeferredContent", DeferredContent);
+  nuxtApp.vueApp.component("OverlayPanel", OverlayPanel);
+  nuxtApp.vueApp.component("Accordion", Accordion);
+  nuxtApp.vueApp.component("AccordionTab", AccordionTab);
+  nuxtApp.vueApp.component("Slider", Slider);
+  nuxtApp.vueApp.component("DataView", DataView);
+  nuxtApp.vueApp.component("Timeline", Timeline);
+  nuxtApp.vueApp.component("TreeTable", TreeTable);
+  nuxtApp.vueApp.component("BlockUI", BlockUI);
+});
