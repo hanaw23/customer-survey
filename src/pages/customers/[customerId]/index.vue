@@ -79,14 +79,10 @@ const deleteCustomer = () => {
               </div>
             </div>
             <div class="flex w-full flex-row justify-end my-1 gap-2 text-sm pr-2">
-              <Button type="button" class="bg-red-500 text-white hover:bg-red-600 my-2 px-3" @click="deleteCustomer">
+              <Button v-tooltip.left="'Delete'" type="button" class="bg-red-500 text-white hover:bg-red-600 my-3 px-3" @click="deleteCustomer">
                 <Icon name="material-symbols:delete-outline" size="18px" />
-                <p class="mx-2">Delete</p>
               </Button>
-              <Button type="button" class="bg-blue-500 text-white hover:bg-blue-600 my-2 px-3" @click="editCustomerModal"
-                ><Icon name="material-symbols:edit-outline-rounded" size="18px" />
-                <p class="mx-2">Edit</p></Button
-              >
+              <Button v-tooltip.left="'Edit'" type="button" class="bg-blue-500 text-white hover:bg-blue-600 my-3 px-3" @click="editCustomerModal"><Icon name="material-symbols:edit-outline-rounded" size="18px" /> </Button>
             </div>
           </div>
         </div>

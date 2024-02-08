@@ -35,7 +35,7 @@ const toggleMobileSidebar = () => {
           <div class="relative z-[100] flex w-full flex-1 flex-col bg-blue-200 pb-4">
             <div key="adsf" class="!text-white">
               <div class="flex items-center justify-between p-4">
-                <span class="text-slate-900">CUSTOMER DATA</span>
+                <span class="text-slate-900 font-semibold">LOGO</span>
                 <Icon name="clarity:times-circle-line" class="text-slate-900 h-6 w-6 cursor-pointer" @click="toggleMobileSidebar" />
               </div>
               <MobileNavigation :menu-items="navigationMenu" @toggle-mobile-sidebar="toggleMobileSidebar" />

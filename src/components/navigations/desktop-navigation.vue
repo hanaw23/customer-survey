@@ -13,7 +13,7 @@ defineProps({
     <PanelMenu :model="menuItems">
       <template #item="slot">
         <div v-if="slot.item">
-          <NuxtLink :to="slot.item.to" exact-active-class="!bg-white !text-black" active-class="!bg-white" class="flex flex-row justify-between gap-2 p-2 hover:bg-blue-300 rounded">
+          <NuxtLink :to="slot.item.to" exact-active-class="!bg-white !text-black" active-class="!bg-white" class="flex flex-row justify-between gap-2 p-2 rounded">
             <div class="flex w-full flex-row items-center justify-between">
               <div class="flex flex-row items-center gap-4">
                 <div v-if="slot.item.icon">

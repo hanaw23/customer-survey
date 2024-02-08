@@ -31,7 +31,7 @@ const rowClick = (event: any) => {
       paginator-template="FirstPageLink PrevPageLink PageLinks NextPageLink LastPageLink CurrentPageReport RowsPerPageDropdown"
       :rows-per-page-options="[5, 10, 15, 20, 25, 30, 35, 40, 45, 50]"
       current-page-report-template="Showing {first} to {last} of {totalRecords} customers"
-      class="p-fluid text-sm"
+      class="p-fluid text-sm cursor-pointer"
       responsive-layout="scroll"
       @row-click="rowClick($event.data)"
     >

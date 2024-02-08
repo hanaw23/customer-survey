@@ -31,10 +31,11 @@ const addNewCustomerModal = () => {
     <!-- List -->
     <ListTemplate title="Customers" description="Provide list of customer data">
       <template #actions>
-        <Button class="bg-blue-400 text-white p-2 hover:bg-blue-500" @click="addNewCustomerModal">
-          <Icon name="fluent:add-24-filled" size="15px" />
-          <p class="mx-2">Add</p>
-        </Button>
+        <div v-tooltip.left="'Add New'">
+          <Button class="bg-blue-400 text-white my-3 px-5 py-1 hover:bg-blue-500" @click="addNewCustomerModal">
+            <Icon name="fluent:add-24-filled" size="25px" />
+          </Button>
+        </div>
       </template>
 
       <template #main>

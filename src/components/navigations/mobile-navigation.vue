@@ -20,7 +20,7 @@ const toggleMobileSidebar = () => {
     <PanelMenu :model="menuItems">
       <template #item="slot">
         <div v-if="slot.item">
-          <NuxtLink :to="slot.item.to" exact-active-class="!bg-slate-300 !text-black" active-class="!bg-slate-400" class="flex flex-row justify-between gap-2 p-2 hover:bg-blue-300 rounded" @click="toggleMobileSidebar">
+          <NuxtLink :to="slot.item.to" exact-active-class="!bg-slate-300 !text-black" active-class="!bg-slate-400" class="flex flex-row justify-between gap-2 p-2 rounded" @click="toggleMobileSidebar">
             <div class="flex w-full flex-row items-center justify-between">
               <div class="flex flex-row items-center gap-2">
                 <div v-if="slot.item.icon">
