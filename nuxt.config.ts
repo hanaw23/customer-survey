@@ -30,7 +30,7 @@ export default defineNuxtConfig({
       mode: "out-in",
     },
   },
-  // srcDir: "src",
+  srcDir: "src",
   devtools: {
     enabled: false,
   },
