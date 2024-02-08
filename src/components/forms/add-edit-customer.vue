@@ -128,7 +128,7 @@ const methodAddEditCustomer = () => {
 </script>
 
 <template>
-  <Dialog v-model:visible="props.openDialog" :header="props.typeForm === FormType.EDIT ? 'Edit Customer' : 'Add Customer'" :style="{ width: '50%' }" class="text-sm" maximizable :draggable="false" :modal="true" :closable="false">
+  <Dialog v-model:visible="props.openDialog" :header="props.typeForm === FormType.EDIT ? 'Edit Customer' : 'Add Customer'" :style="{ width: '50rem' }" class="text-sm" maximizable :draggable="false" :modal="true" :closable="false">
     <!-- Fields -->
     <div>
       <div class="mb-4 mt-2 flex flex-row justify-center">
@@ -169,7 +169,7 @@ const methodAddEditCustomer = () => {
 
     <!-- submit button -->
     <template #footer>
-      <div class="flex justify-end gap-2">
+      <div class="flex justify-end gap-2 mt-4">
         <Button
           type="button"
           label="Cancel"

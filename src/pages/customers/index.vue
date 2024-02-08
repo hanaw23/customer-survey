@@ -1,19 +1,15 @@
 <script setup lang="ts">
-import { useRoute, useRouter } from "vue-router";
-import { onMounted, ref } from "vue";
+import { ref } from "vue";
 import ListTemplate from "../../components/templates/list-template.vue";
 import CostumersList from "../../components/lists/costumers-list.vue";
 import AddEditCustomer from "../../components/forms/add-edit-customer.vue";
 import { FormType } from "../../interfaces/form";
 
-// global
-const route = useRoute();
-const router = useRouter();
-
 // declarations
 // ref
 const addNewCustomer = ref(false);
 const isDialogOpen = ref(false);
+const costumersRef = ref();
 
 // methods
 const openDialog = () => {
@@ -31,16 +27,14 @@ const addNewCustomerModal = () => {
 </script>
 
 <template>
-  <div>
+  <div ref="costumersRef">
     <!-- List -->
     <ListTemplate title="Customers" description="Provide list of customer data">
       <template #actions>
-        <div>
-          <Button class="bg-blue-400 text-white p-2 hover:bg-blue-500" @click="addNewCustomerModal">
-            <Icon name="fluent:add-24-filled" size="15px" />
-            <p class="mx-2">Add Customer</p>
-          </Button>
-        </div>
+        <Button class="bg-blue-400 text-white p-2 hover:bg-blue-500" @click="addNewCustomerModal">
+          <Icon name="fluent:add-24-filled" size="15px" />
+          <p class="mx-2">Add</p>
+        </Button>
       </template>
 
       <template #main>

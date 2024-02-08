@@ -52,7 +52,8 @@ const deleteCustomer = () => {
     acceptClass: "bg-blue-500 py-1 px-4 text-white",
     rejectClass: "bg-red-500 py-1 px-4 text-white",
     accept: () => {
-      dataCustomers.filter((customer) => customer.id !== Number(customerId));
+      const index = dataCustomers.findIndex((customer) => customer.id === Number(customerId));
+      dataCustomers.splice(index, 1);
       toast.add({
         severity: "success",
         summary: "Delete Success",

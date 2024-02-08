@@ -35,8 +35,8 @@ const toggleMobileSidebar = () => {
           <div class="relative z-[100] flex w-full flex-1 flex-col bg-blue-200 pb-4">
             <div key="adsf" class="!text-white">
               <div class="flex items-center justify-between p-4">
-                <span class="text-blue-900">CUSTOMER DATA</span>
-                <icon name="clarity:times-circle-line" class="h-6 w-6 cursor-pointer hover:text-blue-500" @click="toggleMobileSidebar" />
+                <span class="text-slate-900">CUSTOMER DATA</span>
+                <Icon name="clarity:times-circle-line" class="text-slate-900 h-6 w-6 cursor-pointer" @click="toggleMobileSidebar" />
               </div>
               <MobileNavigation :menu-items="navigationMenu" @toggle-mobile-sidebar="toggleMobileSidebar" />
             </div>
@@ -46,7 +46,7 @@ const toggleMobileSidebar = () => {
     </div>
 
     <!-- Desktop View -->
-    <SideBar :class="[desktopSideBarOpen ? 'block !w-56' : 'hidden !w-0', 'transition-duration overflow-hidden']">
+    <SideBar :class="[desktopSideBarOpen ? 'block !w-56' : 'hidden !w-0 transition-duration duration-500 overflow-hidden']">
       <DesktopNavigation :menu-items="navigationMenu" />
     </SideBar>
 
