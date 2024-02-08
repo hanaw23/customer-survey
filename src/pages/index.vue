@@ -6,3 +6,5 @@ onMounted(() => {
   router.push("/customers");
 });
 </script>
+
+<template></template>
