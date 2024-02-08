@@ -39,6 +39,12 @@ export default defineNuxtConfig({
   build: {
     transpile: ["primevue"],
   },
+  builder: "vite",
+  vite: {
+    build: {
+      chunkSizeWarningLimit: 1600,
+    },
+  },
   tailwindcss: {
     cssPath: "~/src/assets/css/main.css",
     exposeConfig: true,
