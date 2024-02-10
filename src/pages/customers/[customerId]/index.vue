@@ -72,7 +72,7 @@ const deleteCustomerMethod = () => {
       const response = await deleteCustomer(customerId);
       loading.value = false;
 
-      if (response.id) {
+      if (response.data) {
         toast.add({
           severity: "success",
           summary: "Delete Success",
@@ -105,12 +105,13 @@ const deleteCustomerMethod = () => {
             </div>
             <Skeleton v-else width="20rem" height="3rem" class="m-2" />
           </div>
-          <div v-if="!loading && customer" class="flex w-full flex-row justify-end my-1 gap-2 text-sm pr-2">
+          <div v-if="!loading && customer && !customer.is_deleted" class="flex w-full flex-row justify-end my-1 gap-2 text-sm pr-2">
             <Button v-tooltip.left="'Delete'" type="button" class="bg-red-500 text-white hover:bg-red-600 my-3 px-3" :loading="loading" @click="deleteCustomerMethod">
               <Icon name="material-symbols:delete-outline" size="18px" />
             </Button>
             <Button v-tooltip.left="'Edit'" type="button" class="bg-blue-500 text-white hover:bg-blue-600 my-3 px-3" @click="editCustomerModal"><Icon name="material-symbols:edit-outline-rounded" size="18px" /> </Button>
           </div>
+          <div v-if="customer && customer.is_deleted" class="bg-red-500 text-white m-3 p-3 rounded font-semibold">DELETED</div>
         </div>
       </div>
     </div>
