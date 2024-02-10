@@ -7,14 +7,14 @@ export interface Customer {
 
 export interface ResponseCustomer {
   data: Customer;
-  message: string;
+  message?: string;
   status_code: number;
+  url?: string;
+  statusCode?: number;
 }
 
 export interface CustomerState {
   customers: [] | Customer[];
   customer: null | Customer;
   totalCount: number;
-  loading: boolean;
-  errorMessage: string;
 }

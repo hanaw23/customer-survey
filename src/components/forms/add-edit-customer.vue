@@ -1,18 +1,18 @@
 <script setup lang="ts">
 import type { PropType } from "vue";
 import { useToast } from "primevue/usetoast";
+
 import { useCustomerStore } from "../../stores/customer.store";
-import type { Customer } from "../../interfaces/customer.ts";
+import type { Customer } from "../../interfaces/customer";
 import { FormType } from "../../interfaces/form";
-import { dataCustomers } from "../../dummy/data";
 
 // global
 const router = useRouter();
 const toast = useToast();
 
 // store
-const { errorMessage, loading } = storeToRefs(useCustomerStore());
-const { createCustomer } = useCustomerStore();
+const { customer } = storeToRefs(useCustomerStore());
+const { createCustomer, updateCustomer, fetchCustomerById } = useCustomerStore();
 
 // props / emits
 const props = defineProps({
@@ -36,7 +36,7 @@ const emits = defineEmits(["close"]);
 
 // declaration
 const customerData = reactive<Customer>({
-  id: dataCustomers.length + 1,
+  id: 0,
   name: "",
   ig_account: "",
   fav_color: "",
@@ -48,6 +48,7 @@ const validation = reactive({
   fav_color: true,
   isSubmit: false,
 });
+const loading = ref(false);
 
 // methods
 watchEffect(() => {
@@ -85,7 +86,7 @@ const closeDialog = (id?: number) => {
   if (id === null) {
     router.push("/customers");
   } else {
-    router.push(`/customers/${customerData.id}`);
+    router.push(`/customers/${id}`);
   }
 };
 
@@ -95,24 +96,46 @@ const methodAddEditCustomer = async () => {
   if (validation.name && validation.ig_account && validation.fav_color && customerData.name && customerData.ig_account && customerData.fav_color) {
     if (props.typeForm === FormType.EDIT) {
       // Edit
-      for (let i = 0; i < dataCustomers.length; i++) {
-        if (dataCustomers[i].id === customerData.id) {
-          dataCustomers[i].name = customerData.name;
-          dataCustomers[i].ig_account = customerData.ig_account;
-          dataCustomers[i].fav_color = customerData.fav_color;
+      loading.value = true;
+      const response = await updateCustomer(Number(customerData.id), customerData.name, customerData.ig_account, customerData.fav_color);
+      loading.value = false;
+
+      if (response.data) {
+        toast.add({
+          severity: "success",
+          summary: "Update Success",
+          detail: `${response.message}`,
+          life: 3000,
+        });
+        closeDialog(response.data.id);
+
+        // reload the page
+        loading.value = true;
+        await fetchCustomerById(response.data.id);
+        loading.value = false;
+        if (!customer.value) {
+          toast.add({
+            severity: "error",
+            summary: "Failed Get Customer Details",
+            detail: `No customer found`,
+            life: 3000,
+          });
         }
+      } else if (response.statusCode === 500 || 400 || 404) {
+        toast.add({
+          severity: "error",
+          summary: "Update Failed",
+          detail: `Failed to update customer`,
+          life: 3000,
+        });
       }
-      toast.add({
-        severity: "success",
-        summary: "Edit Success",
-        detail: "Success edited customer",
-        life: 3000,
-      });
-      closeDialog(customerData.id);
     } else if (props.typeForm === FormType.ADD) {
-      // Add new
+      // Create
+      loading.value = true;
       const response = await createCustomer(customerData.name, customerData.ig_account, customerData.fav_color);
-      if (response) {
+      loading.value = false;
+
+      if (response.data) {
         toast.add({
           severity: "success",
           summary: "Add New Success",
@@ -120,11 +143,11 @@ const methodAddEditCustomer = async () => {
           life: 3000,
         });
         closeDialog(response.data.id);
-      } else {
+      } else if (response.statusCode === 500 || 400 || 404) {
         toast.add({
           severity: "error",
           summary: "Add New Failed",
-          detail: `${errorMessage}`,
+          detail: `Failed to add new customer`,
           life: 3000,
         });
       }

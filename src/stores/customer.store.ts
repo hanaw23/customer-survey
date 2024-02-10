@@ -6,12 +6,19 @@ export const useCustomerStore = defineStore("customer-store", {
     customers: [] as Customer[],
     customer: {} as Customer,
     totalCount: 0,
-    loading: false,
-    errorMessage: "",
   }),
   actions: {
+    async fetchCustomerById(id: number) {
+      const response: ResponseCustomer = await $fetch(`/api/customer/${id}`, {
+        method: "GET",
+        credentials: "include",
+      });
+      if (response) {
+        this.customer = response.data;
+      }
+      return this.customer;
+    },
     async createCustomer(name: string, ig_account: string, fav_color: string) {
-      this.loading = true;
       const response: ResponseCustomer = await $fetch("/api/create/customer", {
         method: "POST",
         credentials: "include",
@@ -21,10 +28,26 @@ export const useCustomerStore = defineStore("customer-store", {
           fav_color,
         },
       });
-      if (!response) {
-        this.errorMessage = `Error: 404 the server cannot find the requested resource.`;
-      }
-      this.loading = false;
+
+      return response;
+    },
+    async updateCustomer(id: number, name: string, ig_account: string, fav_color: string) {
+      const response: ResponseCustomer = await $fetch(`/api/update/customer/${id}`, {
+        method: "PUT",
+        credentials: "include",
+        body: {
+          name,
+          ig_account,
+          fav_color,
+        },
+      });
+      return response;
+    },
+    async deleteCustomer(id: number) {
+      const response: ResponseCustomer = await $fetch(`/api/delete/customer/${id}`, {
+        method: "DELETE",
+        credentials: "include",
+      });
       return response;
     },
   },
