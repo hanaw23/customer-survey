@@ -12,6 +12,13 @@ export interface ResponseCustomer {
   url?: string;
   statusCode?: number;
 }
+export interface ResponseDeleteCustomer {
+  id: number;
+  message?: string;
+  status_code: number;
+  url?: string;
+  statusCode?: number;
+}
 export interface ResponseCustomers {
   data: Customer[];
   message?: string;

@@ -1,5 +1,5 @@
 import { defineStore } from "pinia";
-import type { Customer, CustomerState, ResponseCustomer, ResponseCustomers } from "../interfaces/customer";
+import type { Customer, CustomerState, ResponseCustomer, ResponseCustomers, ResponseDeleteCustomer } from "../interfaces/customer";
 
 export const useCustomerStore = defineStore("customer-store", {
   state: (): CustomerState => ({
@@ -55,7 +55,7 @@ export const useCustomerStore = defineStore("customer-store", {
       return response;
     },
     async deleteCustomer(id: number) {
-      const response: ResponseCustomer = await $fetch(`/api/delete/customer/${id}`, {
+      const response: ResponseDeleteCustomer = await $fetch(`/api/delete/customer/` + `${id}`, {
         method: "DELETE",
         credentials: "include",
       });

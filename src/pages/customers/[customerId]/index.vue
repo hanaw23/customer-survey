@@ -72,7 +72,7 @@ const deleteCustomerMethod = () => {
       const response = await deleteCustomer(customerId);
       loading.value = false;
 
-      if (response.data) {
+      if (response.id) {
         toast.add({
           severity: "success",
           summary: "Delete Success",
@@ -88,7 +88,6 @@ const deleteCustomerMethod = () => {
           life: 3000,
         });
       }
-      return response;
     },
   });
 };
