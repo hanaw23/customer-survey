@@ -32,11 +32,11 @@ const toggleMobileSidebar = () => {
     <div tabindex="0" @keydown.esc="mobileSideBarOpen = false">
       <div class="relative sm:hidden">
         <div v-show="mobileSideBarOpen" class="fixed inset-0 top-0 z-[100] flex">
-          <div class="relative z-[100] flex w-full flex-1 flex-col bg-blue-200 pb-4">
+          <div class="relative z-[100] flex w-full flex-1 flex-col bg-[#154c79] pb-4">
             <div key="adsf" class="!text-white">
               <div class="flex items-center justify-between p-4">
-                <span class="text-slate-900 font-semibold">LOGO</span>
-                <Icon name="clarity:times-circle-line" class="text-slate-900 h-6 w-6 cursor-pointer" @click="toggleMobileSidebar" />
+                <span class="!text-white font-semibold">LOGO</span>
+                <Icon name="clarity:times-circle-line" class="text-white h-6 w-6 cursor-pointer" @click="toggleMobileSidebar" />
               </div>
               <MobileNavigation :menu-items="navigationMenu" @toggle-mobile-sidebar="toggleMobileSidebar" />
             </div>

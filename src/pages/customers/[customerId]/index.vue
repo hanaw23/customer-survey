@@ -31,6 +31,7 @@ const loading = ref(false);
 // Methods
 const fetchCustomer = async () => {
   loading.value = true;
+  customer.value = null;
   await fetchCustomerById(customerId);
   loading.value = false;
   if (!customer.value) {
