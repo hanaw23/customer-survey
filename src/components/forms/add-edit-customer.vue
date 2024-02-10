@@ -1,13 +1,18 @@
 <script setup lang="ts">
 import type { PropType } from "vue";
 import { useToast } from "primevue/usetoast";
-import type { Customer } from "../../interfaces/customer.ts";
+
+import { useCustomerStore } from "../../stores/customer.store";
+import type { Customer } from "../../interfaces/customer";
 import { FormType } from "../../interfaces/form";
-import { dataCustomers } from "../../dummy/data";
 
 // global
 const router = useRouter();
 const toast = useToast();
+
+// store
+const { customer } = storeToRefs(useCustomerStore());
+const { createCustomer, updateCustomer, fetchCustomerById } = useCustomerStore();
 
 // props / emits
 const props = defineProps({
@@ -31,96 +36,132 @@ const emits = defineEmits(["close"]);
 
 // declaration
 const customerData = reactive<Customer>({
-  id: dataCustomers.length + 1,
+  id: 0,
   name: "",
-  igAccount: "",
-  favoriteOutfitColor: "",
+  ig_account: "",
+  fav_color: "",
 });
 const colorSelected = ref("");
 const validation = reactive({
   name: true,
-  igAccount: true,
-  favoriteOutfitColor: true,
+  ig_account: true,
+  fav_color: true,
   isSubmit: false,
 });
+const loading = ref(false);
 
 // methods
 watchEffect(() => {
   if (props.customerData || props.customerData !== null) {
     customerData.id = props.customerData.id;
     customerData.name = props.customerData.name;
-    customerData.igAccount = props.customerData.igAccount;
-    customerData.favoriteOutfitColor = props.customerData.favoriteOutfitColor;
-    colorSelected.value = props.customerData.favoriteOutfitColor;
+    customerData.ig_account = props.customerData.ig_account;
+    customerData.fav_color = props.customerData.fav_color;
+    colorSelected.value = props.customerData.fav_color;
   }
 });
 
 watch([colorSelected, customerData], () => {
-  customerData.favoriteOutfitColor = colorSelected.value;
+  customerData.fav_color = colorSelected.value;
 
   if (customerData.name !== "") {
     validation.name = true;
   } else {
     validation.name = false;
   }
-  if (customerData.igAccount !== "") {
-    validation.igAccount = true;
+  if (customerData.ig_account !== "") {
+    validation.ig_account = true;
   } else {
-    validation.igAccount = false;
+    validation.ig_account = false;
   }
-  if (customerData.favoriteOutfitColor !== "") {
-    validation.favoriteOutfitColor = true;
+  if (customerData.fav_color !== "") {
+    validation.fav_color = true;
   } else {
-    validation.favoriteOutfitColor = false;
+    validation.fav_color = false;
   }
 });
 
-const closeDialog = (id?: number) => {
+const closeDialog = (id: number) => {
   emits("close");
-  if (id === null) {
+  if (id === 0) {
     router.push("/customers");
   } else {
-    router.push(`/customers/${customerData.id}`);
+    router.push(`/customers/${id}`);
   }
 };
 
 // submit / save
-const methodAddEditCustomer = () => {
+const methodAddEditCustomer = async () => {
   validation.isSubmit = false;
-  if (validation.name && validation.igAccount && validation.favoriteOutfitColor && customerData.name && customerData.igAccount && customerData.favoriteOutfitColor) {
+  if (validation.name && validation.ig_account && validation.fav_color && customerData.name && customerData.ig_account && customerData.fav_color) {
     if (props.typeForm === FormType.EDIT) {
-      for (let i = 0; i < dataCustomers.length; i++) {
-        if (dataCustomers[i].id === customerData.id) {
-          dataCustomers[i].name = customerData.name;
-          dataCustomers[i].igAccount = customerData.igAccount;
-          dataCustomers[i].favoriteOutfitColor = customerData.favoriteOutfitColor;
+      // Edit
+      loading.value = true;
+      const response = await updateCustomer(Number(customerData.id), customerData.name, customerData.ig_account, customerData.fav_color);
+      loading.value = false;
+
+      if (response.data) {
+        toast.add({
+          severity: "success",
+          summary: "Update Success",
+          detail: `${response.message}`,
+          life: 3000,
+        });
+        closeDialog(response.data.id);
+
+        // reload the page
+        loading.value = true;
+        await fetchCustomerById(response.data.id);
+        loading.value = false;
+        if (!customer.value) {
+          toast.add({
+            severity: "error",
+            summary: "Failed Get Customer Details",
+            detail: `No customer found`,
+            life: 3000,
+          });
         }
+      } else if (response.statusCode === 500 || response.statusCode === 400 || response.statusCode === 404) {
+        toast.add({
+          severity: "error",
+          summary: "Update Failed",
+          detail: `Failed to update customer`,
+          life: 3000,
+        });
       }
-      toast.add({
-        severity: "success",
-        summary: "Edit Success",
-        detail: "Success edited customer",
-        life: 3000,
-      });
     } else if (props.typeForm === FormType.ADD) {
-      dataCustomers.unshift(customerData);
-      toast.add({
-        severity: "success",
-        summary: "Add New Success",
-        detail: "Success added new customer",
-        life: 3000,
-      });
+      // Create
+      loading.value = true;
+      const response = await createCustomer(customerData.name, customerData.ig_account, customerData.fav_color);
+      loading.value = false;
+
+      if (response.data) {
+        toast.add({
+          severity: "success",
+          summary: "Add New Success",
+          detail: `${response.message}`,
+          life: 3000,
+        });
+        closeDialog(response.data.id);
+      } else if (response.statusCode === 500 || response.statusCode === 400 || response.statusCode === 404) {
+        toast.add({
+          severity: "error",
+          summary: "Add New Failed",
+          detail: `Failed to add new customer`,
+          life: 3000,
+        });
+      }
     }
-    closeDialog(customerData.id);
   } else {
+    //Handle if validation failed
     if (customerData.name === "") {
       validation.name = false;
     }
-    if (customerData.igAccount === "") {
-      validation.igAccount = false;
+    if (customerData.ig_account === "") {
+      validation.ig_account = false;
     }
-    if (customerData.favoriteOutfitColor === "") {
-      validation.favoriteOutfitColor = false;
+    if (customerData.fav_color === "") {
+      validation.fav_color = false;
     }
     validation.isSubmit = true;
   }
@@ -147,22 +188,15 @@ const methodAddEditCustomer = () => {
           <small v-if="!validation.name && validation.isSubmit" class="text-xs text-red-500 -mt-1">Cannot be empty!</small>
         </div>
         <div class="flex flex-col gap-2 mb-3">
-          <label for="instagram" class="text-sm font-medium -mb-2" :class="[!validation.igAccount && validation.isSubmit ? 'text-red-500' : '']">Instagram Account*</label>
-          <InputText id="instagram" v-model="customerData.igAccount" placeholder="Enter customer's instagram account." class="border p-2" :class="[!validation.igAccount && validation.isSubmit ? 'border-red-500' : 'border-slate-300']" />
-          <small v-if="!validation.igAccount && validation.isSubmit" class="text-xs text-red-500 -mt-1">Cannot be empty!</small>
+          <label for="instagram" class="text-sm font-medium -mb-2" :class="[!validation.ig_account && validation.isSubmit ? 'text-red-500' : '']">Instagram Account*</label>
+          <InputText id="instagram" v-model="customerData.ig_account" placeholder="Enter customer's instagram account." class="border p-2" :class="[!validation.ig_account && validation.isSubmit ? 'border-red-500' : 'border-slate-300']" />
+          <small v-if="!validation.ig_account && validation.isSubmit" class="text-xs text-red-500 -mt-1">Cannot be empty!</small>
         </div>
         <div class="flex flex-col gap-2 mb-3">
-          <label for="favcolor" class="text-sm font-medium -mb-2" :class="[!validation.favoriteOutfitColor && validation.isSubmit ? 'text-red-500' : '']">Favorite Outfit Color*</label>
-          <InputText
-            id="favcolor"
-            v-model="customerData.favoriteOutfitColor"
-            placeholder="Pick the color."
-            disabled
-            class="border p-2"
-            :class="[!validation.favoriteOutfitColor && validation.isSubmit ? 'border-red-500' : 'border-slate-300']"
-          />
+          <label for="favcolor" class="text-sm font-medium -mb-2" :class="[!validation.fav_color && validation.isSubmit ? 'text-red-500' : '']">Favorite Outfit Color*</label>
+          <InputText id="favcolor" v-model="customerData.fav_color" placeholder="Pick the color." disabled class="border p-2" :class="[!validation.fav_color && validation.isSubmit ? 'border-red-500' : 'border-slate-300']" />
           <ColorPicker v-model="colorSelected" inline class="mr-6" />
-          <small v-if="!validation.favoriteOutfitColor && validation.isSubmit" class="text-xs text-red-500">Cannot be empty!</small>
+          <small v-if="!validation.fav_color && validation.isSubmit" class="text-xs text-red-500">Cannot be empty!</small>
         </div>
       </div>
     </div>
@@ -174,9 +208,9 @@ const methodAddEditCustomer = () => {
           type="button"
           label="Cancel"
           class="bg-white-400 border border-slate-400 text-slate-400 py-2 px-4 hover:bg-slate-500 hover:text-white hover:border-slate-500"
-          @click="() => (props.typeForm === FormType.EDIT ? closeDialog(customerData.id) : closeDialog())"
+          @click="() => (props.typeForm === FormType.EDIT ? closeDialog(customerData.id) : closeDialog(0))"
         ></Button>
-        <Button type="button" :label="props.typeForm === FormType.EDIT ? 'Save' : 'Submit'" class="bg-blue-500 text-white py-2 px-4 hover:bg-blue-600" @click="methodAddEditCustomer"></Button>
+        <Button type="button" :label="props.typeForm === FormType.EDIT ? 'Save' : 'Submit'" class="bg-blue-500 text-white py-2 px-4 hover:bg-blue-600" :loading="loading" @click="methodAddEditCustomer"></Button>
       </div>
     </template>
   </Dialog>

@@ -2,18 +2,27 @@
 import type { PropType } from "vue";
 import type { MenuItem } from "../../interfaces/navigation-menu";
 
+// global
+const route = useRoute();
+
 // props
-defineProps({
+const props = defineProps({
   menuItems: { type: Array as PropType<MenuItem[]>, default: null },
 });
 </script>
 
 <template>
   <nav class="hidden sm:block">
-    <PanelMenu :model="menuItems">
+    <PanelMenu :model="props.menuItems">
       <template #item="slot">
         <div v-if="slot.item">
-          <NuxtLink :to="slot.item.to" exact-active-class="!bg-white !text-black" active-class="!bg-white" class="flex flex-row justify-between gap-2 p-2 rounded">
+          <NuxtLink
+            :to="slot.item.to"
+            exact-active-class="!bg-white !text-slate-900"
+            active-class="!bg-white -mr-6 !border-none"
+            class="flex flex-row justify-between gap-2 p-4 rounded-[1rem] ml-2"
+            :class="[route.fullPath.includes(`${slot.item.to}`) ? '!bg-white -mr-6 !border-none text-slate-900' : '']"
+          >
             <div class="flex w-full flex-row items-center justify-between">
               <div class="flex flex-row items-center gap-4">
                 <div v-if="slot.item.icon">

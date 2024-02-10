@@ -1,13 +1,12 @@
 <script setup lang="ts">
-import { dataCustomers } from "../../dummy/data";
+import { useCustomerStore } from "../../stores/customer.store";
 import type { Crumb } from "../../interfaces/breadcrumb";
 
 // global
 const route = useRoute();
-const customerId = route.params?.customerId;
-const customerName = computed(() => {
-  return dataCustomers.find((customer) => customer.id === Number(customerId))?.name;
-});
+
+// store
+const { customer } = storeToRefs(useCustomerStore());
 
 // Methods
 
@@ -23,7 +22,7 @@ const breadcrumbs = computed(() => {
     if (route.path.includes("customers")) {
       if (to === `/customers/${route.params.customerId}`) {
         const item = {
-          label: (customerName.value as string) ?? "Details",
+          label: customer.value?.name ?? "",
           disabled: false,
           to,
         };
