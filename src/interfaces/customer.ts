@@ -5,8 +5,15 @@ export interface Customer {
   fav_color: string;
 }
 
-export interface ResponseCustomer {
+export interface ResponseCustomerObject {
   data: Customer;
+  message?: string;
+  status_code: number;
+  url?: string;
+  statusCode?: number;
+}
+export interface ResponseCustomerArray {
+  data: Customer[];
   message?: string;
   status_code: number;
   url?: string;
