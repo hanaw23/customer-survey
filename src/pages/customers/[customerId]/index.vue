@@ -126,8 +126,14 @@ const deleteCustomerMethod = () => {
       <div class="mx-4 grid grid-cols-1 gap-4 gap-y-2 pb-7 text-sm lg:grid-cols-3">
         <!-- details -->
         <div :class="[customer && customer.is_deleted ? ' text-slate-500' : 'text-slate-600']">
-          <p class="text-lg font-medium">Detail Customer</p>
-          <p class="!text-sm">Detail information for customer</p>
+          <div>
+            <p v-if="!loading && customer" class="text-lg font-medium">Detail Customer</p>
+            <Skeleton v-else class="mb-2" height="1rem" width="8rem" />
+          </div>
+          <div>
+            <p v-if="!loading && customer" class="!text-sm">Detail information for customer</p>
+            <Skeleton v-else class="mb-2" width="15rem" />
+          </div>
         </div>
         <div class="lg:col-span-2">
           <div class="grid grid-cols-1 gap-4 gap-y-2 text-sm md:grid-cols-6">
