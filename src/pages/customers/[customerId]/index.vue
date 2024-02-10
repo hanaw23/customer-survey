@@ -44,7 +44,7 @@ const fetchCustomer = async () => {
   }
 };
 onMounted(async () => {
-  fetchCustomer();
+  await fetchCustomer();
 });
 
 // edit and delete
@@ -88,6 +88,7 @@ const deleteCustomerMethod = () => {
           life: 3000,
         });
       }
+      return response;
     },
   });
 };
