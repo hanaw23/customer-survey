@@ -3,7 +3,6 @@
 <template>
   <div>
     <Toast class="z-[100]" />
-    <ConfirmDialog />
     <NuxtLayout>
       <NuxtPage />
     </NuxtLayout>

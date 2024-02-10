@@ -57,7 +57,7 @@ watchEffect(() => {
     customerData.name = props.customerData.name;
     customerData.ig_account = props.customerData.ig_account;
     customerData.fav_color = props.customerData.fav_color;
-    colorSelected.value = props.customerData.fav_color;
+    colorSelected.value = props.customerData.fav_color as string;
   }
 });
 
@@ -175,7 +175,9 @@ const methodAddEditCustomer = async () => {
       <div class="mb-4 mt-2 flex flex-row justify-center">
         <div class="flex flex-col align-items-center justify-content-center gap-1">
           <div class="rounded-[50%] p-1 w-[6rem] h-[6rem] bg-gray-300">
-            <p class="text-slate-50 text-center my-6 font-semibold text-3xl">{{ customerData.name.length >= 2 ? `${customerData.name[0].toUpperCase()}${customerData.name[1].toUpperCase()}` : "Y/A" }}</p>
+            <p class="text-slate-50 text-center my-6 font-semibold text-3xl">
+              {{ customerData && customerData.name && customerData.name.length >= 2 ? `${customerData.name[0].toUpperCase()}${customerData.name[1]?.toUpperCase()}` : "Y/A" }}
+            </p>
           </div>
           <p class="font-bold white-space-nowrap text-center">{{ customerData.name }}</p>
         </div>

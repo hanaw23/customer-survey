@@ -25,8 +25,10 @@ const { fetchCustomerById, deleteCustomer } = useCustomerStore();
 // declarations
 // refs
 const editCustomer = ref(false);
-const isDialogOpen = ref(false);
+const editModal = ref(false);
+const deleteModal = ref(false);
 const loading = ref(false);
+const loadingDelete = ref(false);
 
 // Methods
 const fetchCustomer = async () => {
@@ -48,48 +50,46 @@ onMounted(async () => {
 });
 
 // edit and delete
-const openDialog = () => {
-  isDialogOpen.value = true;
+const openEditDialog = () => {
+  editModal.value = true;
 };
-const closeDialog = () => {
-  isDialogOpen.value = false;
+const closeEditDialog = () => {
+  editModal.value = false;
   editCustomer.value = false;
 };
 const editCustomerModal = () => {
   editCustomer.value = true;
-  openDialog();
+  openEditDialog();
 };
 
-const deleteCustomerMethod = () => {
-  confirm.require({
-    message: `Are you sure you want to delete ${customer ? customer.value?.name : "this customer"}?`,
-    header: "Confirmation",
-    icon: "pi pi-exclamation-triangle",
-    acceptClass: "bg-blue-500 py-1 px-4 text-white",
-    rejectClass: "bg-red-500 py-1 px-4 text-white",
-    accept: async () => {
-      loading.value = true;
-      const response = await deleteCustomer(customerId);
-      loading.value = false;
+const openDeleteDialog = () => {
+  deleteModal.value = true;
+};
+const closeDeleteDialog = () => {
+  deleteModal.value = false;
+};
 
-      if (response.data) {
-        toast.add({
-          severity: "success",
-          summary: "Delete Success",
-          detail: `${response.message}`,
-          life: 3000,
-        });
-        router.push("/customers");
-      } else if (response.statusCode === 500 || response.statusCode === 400 || response.statusCode === 404) {
-        toast.add({
-          severity: "error",
-          summary: "Delete Failed",
-          detail: `Failed to delete customer`,
-          life: 3000,
-        });
-      }
-    },
-  });
+const deleteCustomerMethod = async () => {
+  loadingDelete.value = true;
+  const response = await deleteCustomer(customerId);
+  loadingDelete.value = false;
+
+  if (response.data) {
+    toast.add({
+      severity: "success",
+      summary: "Delete Success",
+      detail: `${response.message}`,
+      life: 3000,
+    });
+    router.push("/customers");
+  } else if (response.statusCode === 500 || response.statusCode === 400 || response.statusCode === 404) {
+    toast.add({
+      severity: "error",
+      summary: "Delete Failed",
+      detail: `Failed to delete customer`,
+      life: 3000,
+    });
+  }
 };
 </script>
 
@@ -106,7 +106,7 @@ const deleteCustomerMethod = () => {
             <Skeleton v-else width="20rem" height="3rem" class="m-2" />
           </div>
           <div v-if="!loading && customer && !customer.is_deleted" class="flex w-full flex-row justify-end my-1 gap-2 text-sm pr-2">
-            <Button v-tooltip.left="'Delete'" type="button" class="bg-red-500 text-white hover:bg-red-600 my-3 px-3" :loading="loading" @click="deleteCustomerMethod">
+            <Button v-tooltip.left="'Delete'" type="button" class="bg-red-500 text-white hover:bg-red-600 my-3 px-3" @click="openDeleteDialog">
               <Icon name="material-symbols:delete-outline" size="18px" />
             </Button>
             <Button v-tooltip.left="'Edit'" type="button" class="bg-blue-500 text-white hover:bg-blue-600 my-3 px-3" @click="editCustomerModal"><Icon name="material-symbols:edit-outline-rounded" size="18px" /> </Button>
@@ -175,6 +175,26 @@ const deleteCustomerMethod = () => {
     </div>
 
     <!-- Edit Modal -->
-    <AddEditCustomer :type-form="FormType.EDIT" :open-dialog="isDialogOpen" :customer-data="(customer as Customer)" @close="closeDialog" />
+    <AddEditCustomer :type-form="FormType.EDIT" :open-dialog="editModal" :customer-data="(customer as Customer)" @close="closeEditDialog" />
+
+    <!-- Delete Modal -->
+    <Dialog v-model:visible="deleteModal" header="Delete Confirmation" :style="{ width: '30rem' }" class="text-sm" :draggable="false" :modal="true" :closable="false">
+      <div class="flex flex-col items-center">
+        <Icon name="bi:exclamation-triangle" class="text-orange-300 h-[4rem] w-[4rem] mb-1" />
+        <p class="text-center lg:text-base md:text-sm">
+          Are you sure you want to delete
+          <span class="font-semibold">
+            {{ customer ? customer.name : "this customer" }}
+          </span>
+          ?
+        </p>
+      </div>
+      <template #footer>
+        <div class="flex justify-end gap-2">
+          <Button type="button" label="No" class="bg-white border border-red-500 text-red-500 py-2 px-4 hover:bg-red-500 hover:text-white hover:border-red-500" @click="closeDeleteDialog" />
+          <Button type="button" label="Yes" class="bg-blue-500 text-white py-2 px-4 hover:bg-blue-600" :loading="loadingDelete" @click="deleteCustomerMethod"></Button>
+        </div>
+      </template>
+    </Dialog>
   </div>
 </template>
