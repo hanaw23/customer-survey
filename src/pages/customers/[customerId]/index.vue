@@ -80,7 +80,7 @@ const deleteCustomerMethod = () => {
           life: 3000,
         });
         router.push("/customers");
-      } else if (response.statusCode === 500 || 400 || 404) {
+      } else if (response.statusCode === 500 || response.statusCode === 400 || response.statusCode === 404) {
         toast.add({
           severity: "error",
           summary: "Delete Failed",

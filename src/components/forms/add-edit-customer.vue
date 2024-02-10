@@ -121,7 +121,7 @@ const methodAddEditCustomer = async () => {
             life: 3000,
           });
         }
-      } else if (response.statusCode === 500 || 400 || 404) {
+      } else if (response.statusCode === 500 || response.statusCode === 400 || response.statusCode === 404) {
         toast.add({
           severity: "error",
           summary: "Update Failed",
@@ -143,7 +143,7 @@ const methodAddEditCustomer = async () => {
           life: 3000,
         });
         closeDialog(response.data.id);
-      } else if (response.statusCode === 500 || 400 || 404) {
+      } else if (response.statusCode === 500 || response.statusCode === 400 || response.statusCode === 404) {
         toast.add({
           severity: "error",
           summary: "Add New Failed",
