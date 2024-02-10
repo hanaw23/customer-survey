@@ -58,9 +58,6 @@ export const useCustomerStore = defineStore("customer-store", {
       const response: ResponseCustomer = await $fetch(`/api/delete/customer/${id}`, {
         method: "PUT",
         credentials: "include",
-        body: {
-          is_deleted: true,
-        },
       });
       return response;
     },
