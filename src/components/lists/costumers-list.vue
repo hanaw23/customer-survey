@@ -55,18 +55,18 @@ const rowClick = (event: any) => {
           </div>
         </template>
       </Column>
-      <Column ref="igAccount" field="igAccount" header="Instagram Account" class="truncate">
+      <Column ref="ig_account" field="ig_account" header="Instagram Account" class="truncate">
         <template #body="slotProps">
           <div>
-            {{ slotProps.data?.igAccount }}
+            {{ slotProps.data?.ig_account }}
           </div>
         </template>
       </Column>
-      <Column ref="favoriteOutfitColor" field="favoriteOutfitColor" header="Favorite Color" class="truncate">
+      <Column ref="fav_color" field="fav_color" header="Favorite Color" class="truncate">
         <template #body="slotProps">
           <div class="flex flex-row gap-3">
-            <div :style="{ backgroundColor: `#${slotProps.data?.favoriteOutfitColor}` as string }" class="w-5 h-5 rounded" />
-            #{{ slotProps.data?.favoriteOutfitColor }}
+            <div :style="{ backgroundColor: `#${slotProps.data?.fav_color}` as string }" class="w-5 h-5 rounded" />
+            #{{ slotProps.data?.fav_color }}
           </div>
         </template>
       </Column>

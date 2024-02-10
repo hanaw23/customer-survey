@@ -1,6 +1,7 @@
 <script setup lang="ts">
 import type { PropType } from "vue";
 import { useToast } from "primevue/usetoast";
+import { useCustomerStore } from "../../stores/customer.store";
 import type { Customer } from "../../interfaces/customer.ts";
 import { FormType } from "../../interfaces/form";
 import { dataCustomers } from "../../dummy/data";
@@ -8,6 +9,10 @@ import { dataCustomers } from "../../dummy/data";
 // global
 const router = useRouter();
 const toast = useToast();
+
+// store
+const { errorMessage, loading } = storeToRefs(useCustomerStore());
+const { createCustomer } = useCustomerStore();
 
 // props / emits
 const props = defineProps({
@@ -33,14 +38,14 @@ const emits = defineEmits(["close"]);
 const customerData = reactive<Customer>({
   id: dataCustomers.length + 1,
   name: "",
-  igAccount: "",
-  favoriteOutfitColor: "",
+  ig_account: "",
+  fav_color: "",
 });
 const colorSelected = ref("");
 const validation = reactive({
   name: true,
-  igAccount: true,
-  favoriteOutfitColor: true,
+  ig_account: true,
+  fav_color: true,
   isSubmit: false,
 });
 
@@ -49,29 +54,29 @@ watchEffect(() => {
   if (props.customerData || props.customerData !== null) {
     customerData.id = props.customerData.id;
     customerData.name = props.customerData.name;
-    customerData.igAccount = props.customerData.igAccount;
-    customerData.favoriteOutfitColor = props.customerData.favoriteOutfitColor;
-    colorSelected.value = props.customerData.favoriteOutfitColor;
+    customerData.ig_account = props.customerData.ig_account;
+    customerData.fav_color = props.customerData.fav_color;
+    colorSelected.value = props.customerData.fav_color;
   }
 });
 
 watch([colorSelected, customerData], () => {
-  customerData.favoriteOutfitColor = colorSelected.value;
+  customerData.fav_color = colorSelected.value;
 
   if (customerData.name !== "") {
     validation.name = true;
   } else {
     validation.name = false;
   }
-  if (customerData.igAccount !== "") {
-    validation.igAccount = true;
+  if (customerData.ig_account !== "") {
+    validation.ig_account = true;
   } else {
-    validation.igAccount = false;
+    validation.ig_account = false;
   }
-  if (customerData.favoriteOutfitColor !== "") {
-    validation.favoriteOutfitColor = true;
+  if (customerData.fav_color !== "") {
+    validation.fav_color = true;
   } else {
-    validation.favoriteOutfitColor = false;
+    validation.fav_color = false;
   }
 });
 
@@ -85,15 +90,16 @@ const closeDialog = (id?: number) => {
 };
 
 // submit / save
-const methodAddEditCustomer = () => {
+const methodAddEditCustomer = async () => {
   validation.isSubmit = false;
-  if (validation.name && validation.igAccount && validation.favoriteOutfitColor && customerData.name && customerData.igAccount && customerData.favoriteOutfitColor) {
+  if (validation.name && validation.ig_account && validation.fav_color && customerData.name && customerData.ig_account && customerData.fav_color) {
     if (props.typeForm === FormType.EDIT) {
+      // Edit
       for (let i = 0; i < dataCustomers.length; i++) {
         if (dataCustomers[i].id === customerData.id) {
           dataCustomers[i].name = customerData.name;
-          dataCustomers[i].igAccount = customerData.igAccount;
-          dataCustomers[i].favoriteOutfitColor = customerData.favoriteOutfitColor;
+          dataCustomers[i].ig_account = customerData.ig_account;
+          dataCustomers[i].fav_color = customerData.fav_color;
         }
       }
       toast.add({
@@ -102,25 +108,37 @@ const methodAddEditCustomer = () => {
         detail: "Success edited customer",
         life: 3000,
       });
+      closeDialog(customerData.id);
     } else if (props.typeForm === FormType.ADD) {
-      dataCustomers.unshift(customerData);
-      toast.add({
-        severity: "success",
-        summary: "Add New Success",
-        detail: "Success added new customer",
-        life: 3000,
-      });
+      // Add new
+      const response = await createCustomer(customerData.name, customerData.ig_account, customerData.fav_color);
+      if (response) {
+        toast.add({
+          severity: "success",
+          summary: "Add New Success",
+          detail: `${response.message}`,
+          life: 3000,
+        });
+        closeDialog(response.data.id);
+      } else {
+        toast.add({
+          severity: "error",
+          summary: "Add New Failed",
+          detail: `${errorMessage}`,
+          life: 3000,
+        });
+      }
     }
-    closeDialog(customerData.id);
   } else {
+    //Handle if validation failed
     if (customerData.name === "") {
       validation.name = false;
     }
-    if (customerData.igAccount === "") {
-      validation.igAccount = false;
+    if (customerData.ig_account === "") {
+      validation.ig_account = false;
     }
-    if (customerData.favoriteOutfitColor === "") {
-      validation.favoriteOutfitColor = false;
+    if (customerData.fav_color === "") {
+      validation.fav_color = false;
     }
     validation.isSubmit = true;
   }
@@ -147,22 +165,15 @@ const methodAddEditCustomer = () => {
           <small v-if="!validation.name && validation.isSubmit" class="text-xs text-red-500 -mt-1">Cannot be empty!</small>
         </div>
         <div class="flex flex-col gap-2 mb-3">
-          <label for="instagram" class="text-sm font-medium -mb-2" :class="[!validation.igAccount && validation.isSubmit ? 'text-red-500' : '']">Instagram Account*</label>
-          <InputText id="instagram" v-model="customerData.igAccount" placeholder="Enter customer's instagram account." class="border p-2" :class="[!validation.igAccount && validation.isSubmit ? 'border-red-500' : 'border-slate-300']" />
-          <small v-if="!validation.igAccount && validation.isSubmit" class="text-xs text-red-500 -mt-1">Cannot be empty!</small>
+          <label for="instagram" class="text-sm font-medium -mb-2" :class="[!validation.ig_account && validation.isSubmit ? 'text-red-500' : '']">Instagram Account*</label>
+          <InputText id="instagram" v-model="customerData.ig_account" placeholder="Enter customer's instagram account." class="border p-2" :class="[!validation.ig_account && validation.isSubmit ? 'border-red-500' : 'border-slate-300']" />
+          <small v-if="!validation.ig_account && validation.isSubmit" class="text-xs text-red-500 -mt-1">Cannot be empty!</small>
         </div>
         <div class="flex flex-col gap-2 mb-3">
-          <label for="favcolor" class="text-sm font-medium -mb-2" :class="[!validation.favoriteOutfitColor && validation.isSubmit ? 'text-red-500' : '']">Favorite Outfit Color*</label>
-          <InputText
-            id="favcolor"
-            v-model="customerData.favoriteOutfitColor"
-            placeholder="Pick the color."
-            disabled
-            class="border p-2"
-            :class="[!validation.favoriteOutfitColor && validation.isSubmit ? 'border-red-500' : 'border-slate-300']"
-          />
+          <label for="favcolor" class="text-sm font-medium -mb-2" :class="[!validation.fav_color && validation.isSubmit ? 'text-red-500' : '']">Favorite Outfit Color*</label>
+          <InputText id="favcolor" v-model="customerData.fav_color" placeholder="Pick the color." disabled class="border p-2" :class="[!validation.fav_color && validation.isSubmit ? 'border-red-500' : 'border-slate-300']" />
           <ColorPicker v-model="colorSelected" inline class="mr-6" />
-          <small v-if="!validation.favoriteOutfitColor && validation.isSubmit" class="text-xs text-red-500">Cannot be empty!</small>
+          <small v-if="!validation.fav_color && validation.isSubmit" class="text-xs text-red-500">Cannot be empty!</small>
         </div>
       </div>
     </div>
@@ -176,7 +187,7 @@ const methodAddEditCustomer = () => {
           class="bg-white-400 border border-slate-400 text-slate-400 py-2 px-4 hover:bg-slate-500 hover:text-white hover:border-slate-500"
           @click="() => (props.typeForm === FormType.EDIT ? closeDialog(customerData.id) : closeDialog())"
         ></Button>
-        <Button type="button" :label="props.typeForm === FormType.EDIT ? 'Save' : 'Submit'" class="bg-blue-500 text-white py-2 px-4 hover:bg-blue-600" @click="methodAddEditCustomer"></Button>
+        <Button type="button" :label="props.typeForm === FormType.EDIT ? 'Save' : 'Submit'" class="bg-blue-500 text-white py-2 px-4 hover:bg-blue-600" :loading="loading" @click="methodAddEditCustomer"></Button>
       </div>
     </template>
   </Dialog>

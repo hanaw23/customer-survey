@@ -34,7 +34,7 @@ export default defineNuxtConfig({
   devtools: {
     enabled: false,
   },
-  modules: ["@nuxtjs/tailwindcss", "nuxt-icon"],
+  modules: ["@nuxtjs/tailwindcss", "nuxt-icon", "@pinia/nuxt"],
   plugins: [{ src: "~/plugins/primevue.ts" }],
   build: {
     transpile: ["primevue"],
@@ -45,4 +45,9 @@ export default defineNuxtConfig({
     viewer: false,
   },
   css: ["primevue/resources/primevue.min.css", "primeicons/primeicons.css", "primevue/resources/themes/aura-light-blue/theme.css"],
+  routeRules: {
+    "/api/**": {
+      proxy: { to: "http://127.0.0.1:5000/api/**" },
+    },
+  },
 });

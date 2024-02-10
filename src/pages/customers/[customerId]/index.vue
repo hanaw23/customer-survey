@@ -111,7 +111,7 @@ const deleteCustomer = () => {
                 <div>
                   <div class="grid grid-cols-2 gap-20">
                     <p class="mb-1">Instagram Account</p>
-                    <p class="text-gray-500">{{ customerData.igAccount }}</p>
+                    <p class="text-gray-500">{{ customerData.ig_account }}</p>
                   </div>
                 </div>
               </div>
@@ -120,8 +120,8 @@ const deleteCustomer = () => {
                   <div class="grid grid-cols-2 gap-20">
                     <p class="mb-1">Favorite Outfit Color</p>
                     <div class="flex flex-row gap-3">
-                      <div :style="{ backgroundColor: `#${customerData.favoriteOutfitColor}` as string }" class="w-5 h-5 rounded" />
-                      #{{ customerData.favoriteOutfitColor }}
+                      <div :style="{ backgroundColor: `#${customerData.fav_color}` as string }" class="w-5 h-5 rounded" />
+                      #{{ customerData.fav_color }}
                     </div>
                   </div>
                 </div>
