@@ -97,10 +97,10 @@ const deleteCustomerMethod = () => {
   <div class="text-sm">
     <!-- Header -->
     <div class="flex flex-row justify-between">
-      <div class="flex w-full flex-col overflow-hidden rounded-md border bg-white shadow">
+      <div class="flex w-full flex-col overflow-hidden rounded-md border shadow" :class="[customer && customer.is_deleted ? ' bg-slate-50' : 'bg-white']">
         <div class="flex flex-row justify-between w-full">
           <div class="flex w-full flex-row">
-            <div v-if="!loading && customer" class="flex max-w-fit flex-col gap-2 border-r p-4 font-semibold text-2xl">
+            <div v-if="!loading && customer" class="flex max-w-fit flex-col gap-2 border-r p-4 font-semibold text-2xl" :class="[customer && customer.is_deleted ? 'text-slate-500' : '']">
               {{ customer.name }}
             </div>
             <Skeleton v-else width="20rem" height="3rem" class="m-2" />
@@ -115,11 +115,17 @@ const deleteCustomerMethod = () => {
         </div>
       </div>
     </div>
+
+    <!-- Message if data is deleted  -->
+    <div v-if="customer && customer.is_deleted">
+      <Message severity="warn" :closable="false" :sticky="true">This customer has been deleted!</Message>
+    </div>
+
     <!-- Body -->
-    <div class="rounded-md border py-4 my-4">
+    <div class="rounded-md border py-4 my-4" :class="[customer && customer.is_deleted ? 'bg-slate-50 text-slate-400' : '']">
       <div class="mx-4 grid grid-cols-1 gap-4 gap-y-2 pb-7 text-sm lg:grid-cols-3">
         <!-- details -->
-        <div class="text-gray-600">
+        <div :class="[customer && customer.is_deleted ? ' text-slate-500' : 'text-slate-600']">
           <p class="text-lg font-medium">Detail Customer</p>
           <p class="!text-sm">Detail information for customer</p>
         </div>
@@ -129,7 +135,7 @@ const deleteCustomerMethod = () => {
               <div v-if="!loading && customer">
                 <div class="grid grid-cols-2 gap-20">
                   <p class="mb-1">Name</p>
-                  <p class="text-gray-500">
+                  <p :class="[customer && customer.is_deleted ? ' text-slate-400' : 'text-slate-500']">
                     {{ customer.name }}
                   </p>
                 </div>
@@ -140,7 +146,7 @@ const deleteCustomerMethod = () => {
               <div v-if="!loading && customer">
                 <div class="grid grid-cols-2 gap-20">
                   <p class="mb-1">Instagram Account</p>
-                  <p class="text-gray-500">{{ customer.ig_account }}</p>
+                  <p :class="[customer && customer.is_deleted ? ' text-slate-400' : 'text-slate-500']">{{ customer.ig_account }}</p>
                 </div>
               </div>
               <Skeleton v-else class="mb-2" />
@@ -151,7 +157,7 @@ const deleteCustomerMethod = () => {
                   <p class="mb-1">Favorite Outfit Color</p>
                   <div class="flex flex-row gap-3">
                     <div :style="{ backgroundColor: `#${customer.fav_color}` as string }" class="w-5 h-5 rounded" />
-                    #{{ customer.fav_color }}
+                    <p :class="[customer && customer.is_deleted ? ' text-slate-400' : 'text-slate-500']">#{{ customer.fav_color }}</p>
                   </div>
                 </div>
               </div>
