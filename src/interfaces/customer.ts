@@ -5,17 +5,18 @@ export interface Customer {
   fav_color: string;
 }
 
-export interface ResponseCustomerObject {
+export interface ResponseCustomer {
   data: Customer;
   message?: string;
   status_code: number;
   url?: string;
   statusCode?: number;
 }
-export interface ResponseCustomerArray {
+export interface ResponseCustomers {
   data: Customer[];
   message?: string;
   status_code: number;
+  total_count: number;
   url?: string;
   statusCode?: number;
 }

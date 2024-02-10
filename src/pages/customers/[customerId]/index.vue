@@ -8,7 +8,6 @@ import AddEditCustomer from "../../../components/forms/add-edit-customer.vue";
 
 import { useCustomerStore } from "../../../stores/customer.store";
 import type { Customer } from "../../../interfaces/customer";
-import { dataCustomers } from "../../../dummy/data";
 import { FormType } from "../../../interfaces/form";
 
 // global
