@@ -3,7 +3,8 @@
 1. Default API using https://customer-survey-db.vercel.app
 2. If you want to run using local API please uncomment the comment note in file "nuxt.config.ts" > "routeRules"
 
-Github repo: https://github.com/hanaw23/customer-survey
+Deployment URL: https://customer-survey-web-app.vercel.app/
+Github Repo: https://github.com/hanaw23/customer-survey
 
 # Nuxt 3 Minimal Starter
 
