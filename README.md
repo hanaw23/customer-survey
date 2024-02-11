@@ -1,3 +1,8 @@
+# NOTE:
+
+1. Default API using https://customer-survey-db.vercel.app
+2. If you want to run using local API please uncomment the comment note in file "nuxt.config.ts" > "routeRules"
+
 # Nuxt 3 Minimal Starter
 
 Look at the [Nuxt 3 documentation](https://nuxt.com/docs/getting-started/introduction) to learn more.
