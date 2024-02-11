@@ -57,7 +57,8 @@ export default defineNuxtConfig({
   css: ["primevue/resources/primevue.min.css", "primeicons/primeicons.css", "primevue/resources/themes/aura-light-blue/theme.css"],
   routeRules: {
     "/api/**": {
-      proxy: { to: "http://127.0.0.1:5000/api/**" },
+      // proxy: { to: "http://127.0.0.1:5000/api/**" }, // uncomment this if you want to run API by locally
+      proxy: { to: "https://customer-survey-db.vercel.app/api/**" },
     },
   },
 });
